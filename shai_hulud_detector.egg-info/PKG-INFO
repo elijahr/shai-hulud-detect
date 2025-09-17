@@ -1,36 +1,49 @@
+Metadata-Version: 2.4
+Name: shai-hulud-detector
+Version: 2.0.0
+Summary: Python detector for Shai-Hulud NPM supply chain attack indicators with concurrent processing
+Author-email: Shai-Hulud Detection Team <security@example.com>
+License: MIT
+Project-URL: Homepage, https://github.com/elijahr/shai-hulud-detect
+Project-URL: Repository, https://github.com/elijahr/shai-hulud-detect
+Project-URL: Issues, https://github.com/elijahr/shai-hulud-detect/issues
+Keywords: security,npm,supply-chain,malware,detection
+Classifier: Development Status :: 4 - Beta
+Classifier: Environment :: Console
+Classifier: Intended Audience :: Developers
+Classifier: Intended Audience :: System Administrators
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: OS Independent
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.8
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Classifier: Programming Language :: Python :: 3.12
+Classifier: Topic :: Security
+Classifier: Topic :: Software Development :: Quality Assurance
+Classifier: Topic :: System :: Systems Administration
+Requires-Python: >=3.8
+Description-Content-Type: text/markdown
+License-File: LICENSE
+Requires-Dist: importlib-resources>=1.3.0; python_version < "3.9"
+Requires-Dist: tqdm>=4.65.0
+Provides-Extra: dev
+Requires-Dist: pytest>=7.0.0; extra == "dev"
+Requires-Dist: pytest-asyncio>=0.21.0; extra == "dev"
+Requires-Dist: black>=23.0.0; extra == "dev"
+Requires-Dist: ruff>=0.1.0; extra == "dev"
+Dynamic: license-file
+
 # Shai-Hulud NPM Supply Chain Attack Detector
-
-[![License](https://img.shields.io/badge/license-MIT-green)](LICENSE)
-[![Python](https://img.shields.io/badge/python-3.8+-blue)](#requirements)
-[![Status](https://img.shields.io/badge/status-Active-success)](../../)
-[![Contributions](https://img.shields.io/badge/contributions-Welcome-orange)](CONTRIBUTING.md)
-[![Last Commit](https://img.shields.io/github/last-commit/Cobenian/shai-hulud-detect)](https://github.com/Cobenian/shai-hulud-detect/commits/main)
-[![Security Tool](https://img.shields.io/badge/type-Security%20Tool-red)](#overview)
-
 
 <img src="shai_hulu_detector.jpg" alt="sshd" width="80%" />
 
-A high-performance Python package to detect indicators of compromise from the September 2025 Shai-Hulud npm supply chain attack that affected 187+ npm packages. This self-replicating worm represents one of the most severe JavaScript supply chain attacks to date, surpassing previous incidents like the chalk/debug compromises, color-name attacks, and eslint package hijacking. The package currently detects 270+ confirmed compromised package versions, including popular packages like `@ctrl/tinycolor` with 2 million weekly downloads.
+A Python script to detect indicators of compromise from the September 2025 Shai-Hulud npm supply chain attack that affected 187+ npm packages. The script currently detects 270+ confirmed compromised package versions, including popular packages like `@ctrl/tinycolor` with 2 million weekly downloads.
 
 ## Overview
 
-The Shai-Hulud attack is a sophisticated self-replicating worm that compromises npm packages through stolen maintainer credentials. The malware uses postinstall hooks to propagate and employs Trufflehog to scan for secrets and credentials. This detector identifies multiple indicators of compromise (IoCs) to help determine if your system has been affected.
-
-## Quick Start
-
-```bash
-# Install directly from GitHub (recommended)
-pip install git+https://github.com/elijahr/shai-hulud-detect.git
-
-# Scan your project for Shai-Hulud indicators
-shai-hulud-detector /path/to/your/project
-
-# For comprehensive security scanning with progress tracking
-shai-hulud-detector --paranoid --verbose /path/to/your/project
-
-# Scan multiple projects at once
-shai-hulud-detector /path/to/proj1 /path/to/proj2 /path/to/proj3
-```
+The Shai-Hulud attack is a sophisticated self-replicating worm that compromises npm packages through stolen maintainer credentials. The malware uses postinstall hooks to propagate and employs Trufflehog to scan for secrets and credentials. This script detects multiple indicators of compromise (IoCs) to help identify if your system has been affected.
 
 ## What it Detects
 
@@ -49,11 +62,11 @@ shai-hulud-detector /path/to/proj1 /path/to/proj2 /path/to/proj3
 
 ## Compromised Packages Detected
 
-The detector identifies compromised packages from the Shai-Hulud attack, which affected 187+ packages total. **Our current detection covers 270+ confirmed compromised packages** with specific version numbers, plus broader namespace detection.
+The script detects compromised packages from the Shai-Hulud attack, which affected 187+ packages total. **Our current detection covers 270+ confirmed compromised packages** with specific version numbers, plus broader namespace detection.
 
 ### Package Detection Method
 
-The package loads compromised packages from an external file (`compromised-packages.txt`) which contains:
+The script loads compromised packages from an external file (`compromised-packages.txt`) which contains:
 - **270+ confirmed compromised package versions** with exact version numbers
 - **11 affected namespaces** for broader detection of packages from compromised maintainer accounts
 
@@ -79,7 +92,7 @@ The package loads compromised packages from an external file (`compromised-packa
 - **Format**: `package_name:version` (one per line)
 - **Comments**: Lines starting with `#` are ignored
 - **Updates**: The file can be updated as new compromised packages are discovered
-- **Error handling**: Package fails with clear error if file is missing (no silent fallbacks)
+- **Fallback**: If the file is missing, the script uses a core embedded list
 
 ### Staying Updated on New Compromised Packages
 
@@ -95,21 +108,10 @@ Check these security advisories regularly for newly discovered compromised packa
 
 1. Check the security advisories above for new compromised packages
 2. Add them to `compromised-packages.txt` in the format `package_name:version`
-3. Test the package to ensure detection works
+3. Test the script to ensure detection works
 4. Consider contributing updates back to this repository
 
 **Coverage Note**: The Shai-Hulud attack affected 187+ packages total. Our detection now covers 270+ specific compromised package versions, which represents **comprehensive coverage that exceeds the reported total** due to multiple versions of the same packages being compromised. Combined with namespace-based detection, this provides excellent protection against the attack. The difference in numbers is because many packages had multiple compromised versions (e.g., @operato/board versions 9.0.36 through 9.0.46).
-
-## Latest Updates
-
-- **2025-09-17**: **Major Rewrite** - Converted to high-performance Python package with 10x speed improvement
-- **2025-09-17**: Added real-time progress bars and concurrent processing
-- **2025-09-17**: Professional pip package installation with command-line tool
-- **2025-09-17**: Expanded to 270+ packages with @operato, @teselagen, @things-factory, @nstudio, and @crowdstrike namespaces
-- **2025-09-16**: Externalized compromised package list to `compromised-packages.txt` for easier maintenance and updates
-- **2025-09-16**: Added paranoid mode with typosquatting detection and network exfiltration pattern analysis
-
-*For complete version history, see [CHANGELOG.md](CHANGELOG.md)*
 
 ## Installation
 
@@ -216,23 +218,23 @@ shai-hulud-detector --no-progress /path/to/project
 **System Resources**
 - Multi-core systems benefit from concurrent processing
 - Use `--max-workers` to limit workers on resource-constrained systems
-- 10x faster than previous bash implementation
+- Typically 10x faster than shell-based alternatives
 
 ## Output Interpretation
 
 ### Progress Display
-The detector shows detailed progress information:
+The script now shows detailed progress information:
 ```
 [1/9] 🔍 Checking for malicious workflow files...
 [2/9] 🔍 Checking file hashes for known malicious content...
-⚡ Using concurrent processing with 8 CPU cores
+⚡ GNU parallel detected - using accelerated processing with 8 CPU cores
 ```
 
 **Verbose Mode** (`--verbose`) adds detailed information:
 ```
   ↳ Scanning 1,247 JavaScript/TypeScript/JSON files for known malicious hash...
   ↳ Found 23 package.json files to analyze
-  ↳ Using concurrent processing for hash verification
+  ↳ Using parallel processing for hash verification
 ```
 
 ### Clean System
@@ -242,7 +244,7 @@ Your system appears clean from this specific attack.
 ```
 
 ### Compromised System
-The detector will show:
+The script will show:
 - **🚨 HIGH RISK**: Definitive indicators of compromise
 - **⚠️ MEDIUM RISK**: Suspicious patterns requiring manual review
 - **Summary**: Count of issues found
@@ -279,22 +281,22 @@ When scanning multiple directories, results are consolidated:
 
 ## Testing
 
-The repository includes test cases to validate the detector:
+The repository includes test cases to validate the script:
 
 ```bash
 # Test on clean project (should show no issues)
-shai-hulud-detector test-cases/clean-project
+./shai-hulud-detector.sh test-cases/clean-project
 
 # Test on infected project (should show multiple issues)
-shai-hulud-detector test-cases/infected-project
+./shai-hulud-detector.sh test-cases/infected-project
 
 # Test on mixed project (should show medium risk issues)
-shai-hulud-detector test-cases/mixed-project
+./shai-hulud-detector.sh test-cases/mixed-project
 ```
 
 ## How it Works
 
-The detector performs these comprehensive checks:
+The script performs these comprehensive checks:
 
 1. **Package Database Loading**: Loads the complete list of 187+ compromised packages from `compromised-packages.txt`
 2. **Workflow Detection**: Searches for `shai-hulud-workflow.yml` files in `.github/workflows/`
@@ -318,11 +320,11 @@ The detector performs these comprehensive checks:
 
 ## Contributing
 
-If you discover additional IoCs or compromised packages related to the Shai-Hulud attack, please update the package list and test thoroughly.
+If you discover additional IoCs or compromised packages related to the Shai-Hulud attack, please update the arrays in the script and test thoroughly.
 
 ## Security Note
 
-This detector is for **detection only**. It does not:
+This script is for **detection only**. It does not:
 - Automatically remove malicious code
 - Fix compromised packages
 - Prevent future attacks
@@ -339,7 +341,7 @@ Recent investigations have revealed a potential connection between the Shai-Hulu
 - **New Package Targets**: `angulartics2` and `koa2-swagger-ui` packages have been added to the compromised list
 
 ### Enhanced Detection Capabilities
-The detector now includes:
+The script now includes:
 - Repository migration pattern detection
 - Package-lock.json integrity verification
 - Context-aware Trufflehog detection to reduce false positives
@@ -363,68 +365,6 @@ The detector now includes:
 - **Attack Type**: Self-replicating worm using postinstall hooks
 - **Malicious Endpoint**: `https://webhook.site/bb8ca5f6-4175-45d2-b042-fc9ebb8170b7`
 - **Exfiltration Method**: GitHub repositories named "Shai-Hulud"
-
-## Contributing
-
-We welcome contributions to improve the Shai-Hulud detector! The community's help is crucial for keeping pace with this evolving threat.
-
-### How to Contribute
-
-#### Adding New Compromised Packages
-
-1. **Fork the repository**
-   ```bash
-   git clone https://github.com/yourusername/shai-hulud-detector.git
-   cd shai-hulud-detector
-   ```
-
-2. **Update the package list**
-   - Add new packages to `compromised-packages.txt` in the format `package_name:version`
-   - Include a source/reference for where you found the compromised package
-   - Group packages by namespace for organization
-
-3. **Test your changes**
-   ```bash
-   # Install the package locally for testing
-   pip install -e .
-
-   # Test that the package loads the new packages
-   shai-hulud-detector test-cases/clean-project
-
-   # Run all test cases to ensure nothing breaks
-   shai-hulud-detector test-cases/infected-project
-   shai-hulud-detector test-cases/mixed-project
-   ```
-
-4. **Submit a Pull Request**
-   - Create a descriptive PR title (e.g., "Add @example/package compromised versions")
-   - Include details about the source of the information
-   - Reference any security advisories or reports
-   - Explain any version patterns or attack details
-
-#### Other Contributions
-
-- **Bug fixes**: Report and fix issues with detection accuracy
-- **New IoCs**: Add detection for additional indicators of compromise
-- **Documentation**: Improve clarity and add examples
-- **Test cases**: Add new test scenarios for edge cases
-
-### Contribution Guidelines
-
-- **Verify sources**: Only add packages confirmed by reputable security firms
-- **Test thoroughly**: Ensure changes don't break existing functionality
-- **Document changes**: Update relevant documentation and changelog
-- **Follow patterns**: Match existing code style and organization
-- **Security first**: Never include actual malicious code in test cases
-
-### Reporting New Compromised Packages
-
-If you can't submit a PR, you can still help by reporting new compromised packages:
-
-1. Open an issue with the title "New compromised package: [package-name]"
-2. Include the package name, version, and source of information
-3. Provide links to security advisories or reports
-4. We'll review and add verified packages to the detection list
 
 ## License
 
