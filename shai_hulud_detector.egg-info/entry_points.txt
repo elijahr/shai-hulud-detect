@@ -1,0 +1,2 @@
+[console_scripts]
+shai-hulud-detector = shai_hulud_detector.main:main
